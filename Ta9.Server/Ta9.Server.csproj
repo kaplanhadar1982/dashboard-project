@@ -8,6 +8,13 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR.StackExchangeRedis" Version="1.1.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Ta9.Domain\Ta9.Domain.csproj" />
+    <ProjectReference Include="..\Ta9.Application\Ta9.Application.csproj" />
+    <ProjectReference Include="..\Ta9.Persistence\Ta9.Persistence.csproj" />
   </ItemGroup>
 
 </Project>
