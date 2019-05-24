@@ -1,0 +1,24 @@
+.client{
+    margin: 10px;
+    border: 1px solid #5cb85c;
+    border-radius: 4px
+}
+
+.client-details{
+    padding: 20px;
+    text-align: left;
+    font-size: 18px;
+}
+
+h3{
+    margin:0px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    background-color: #5cb85c;
+    color: #fff;
+    text-align: center;
+}
+
+
+
+

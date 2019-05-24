@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Ta9.Server.Hubs;
+using Ta9.Server.Model;
+using Ta9.Server.Model.Interfaces;
 
 namespace Ta9.Server
 {
@@ -31,6 +33,10 @@ namespace Ta9.Server
                                 .AllowCredentials();
                     });
             });
+
+            services.AddSingleton<IAppClientsManager, AppClientsManager>();
+            services.AddSingleton<IAppClientFactory, AppClientFactory>();
+
             services.AddHttpContextAccessor();
         }
 
