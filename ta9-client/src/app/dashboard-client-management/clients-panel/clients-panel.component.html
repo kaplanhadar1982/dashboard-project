@@ -1,5 +1,5 @@
 <div>
-  <app-client *ngFor="let clientElement of clients"
+  <app-client *ngFor="let clientElement of (clientsState | async).clients"
     [client]="clientElement">
   </app-client>
 </div>

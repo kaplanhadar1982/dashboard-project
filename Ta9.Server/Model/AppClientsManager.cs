@@ -12,15 +12,15 @@ namespace Ta9.Server.Model
             _clients = new ConcurrentDictionary<string,AppClient>();
         }
 
-        public void Add(string connectionId, AppClient client)
+        public void Add(string clientId, AppClient client)
         {
-            _clients.AddOrUpdate(connectionId,client,(k,v) => client);
+            _clients.AddOrUpdate(clientId,client,(k,v) => client);
         }
 
-        public void UpdateOnlineStatue(string connectionId,bool isOnline)
+        public void UpdateOnlineStatue(string clientId,bool isOnline)
         {
-            if(_clients.TryGetValue(connectionId, out AppClient client))
-                _clients.AddOrUpdate(connectionId,client,(k,oldVal) => {
+            //if(_clients.TryGetValue(clientId, out AppClient client))
+                _clients.AddOrUpdate(clientId,new AppClient(),(k,oldVal) => {
                     var newVal = oldVal;
                     newVal.IsOnline = isOnline;
                     return newVal;

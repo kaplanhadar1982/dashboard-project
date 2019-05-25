@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Ta9.Server.Hubs;
 using Ta9.Server.Model;
 using Ta9.Server.Model.Interfaces;
+using System.IO;
 
 namespace Ta9.Server
 {
@@ -19,9 +20,8 @@ namespace Ta9.Server
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=39894
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSignalR()
-            .AddStackExchangeRedis("dashboard-app.redis.cache.windows.net:6380,password=7VzUNjxIjv7GBj02wnpMVayjXProie+kx7ZjzeBq8uQ=,ssl=True,abortConnect=False");
-            
+            services.AddSignalR();
+            services.AddMvc();
             services.AddCors(options =>
             {
                 options.AddPolicy(MyAllowSpecificOrigins,
@@ -47,6 +47,20 @@ namespace Ta9.Server
             app.UseSignalR(routes => {
                 routes.MapHub<ServerNotificationsHub>("/hub");
             });
+            app.UseMvc();
+            app.Use(async (context, next) => {
+                await next();
+                if (context.Response.StatusCode == 404 &&
+                    !Path.HasExtension(context.Request.Path.Value) &&
+                    context.Request.Path.Value.StartsWith("/dashboard/")) {
+                        context.Request.Path = "/dashboard/index.html";
+                        await next();
+                    }
+                });
+
+            app.UseMvcWithDefaultRoute();
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
         }
     }
 }

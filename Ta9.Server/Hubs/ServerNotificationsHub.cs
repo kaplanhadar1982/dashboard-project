@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.SignalR;
 using System.Threading.Tasks;
 using System;
+using System.Web;
+using System.Collections.Specialized;
 using Microsoft.AspNetCore.Http;
 using Ta9.Server.Model;
 using Ta9.Server.Model.Interfaces;
@@ -19,20 +21,16 @@ namespace Ta9.Server.Hubs
             _clientManager = clientManager;
         }
 
-        public async Task SendMessage(string user, string message)
-        {
-            await Clients.All.SendAsync("ReceiveMessage", user, message);
-        }
+        // public async Task SendMessage(string user, string message)
+        // {
+        //     await Clients.All.SendAsync("ReceiveMessage", user, message);
+        // }
 
         public override async Task OnConnectedAsync()
         {
             var httpContext = Context.GetHttpContext();
-            //need the token
-            //var s= Context.User.Identity;
-            //httpContext.Request.Headers["User-Agent"] 
-            //var bc = httpContext.Request.Headers.Browser;
-            //AppClient ac = _clientFactory.Create(Context.GetHttpContext());
-            _clientManager.Add( "",_clientFactory.Create(httpContext));
+            string clientid = HttpUtility.ParseQueryString(httpContext.Request.QueryString.Value)["clientid"]; 
+            _clientManager.Add( clientid,_clientFactory.Create(httpContext));
             await Clients.All.SendAsync("ReceiveMessage", "", _clientManager.GetClients());
             await base.OnConnectedAsync();
         }
@@ -42,7 +40,8 @@ namespace Ta9.Server.Hubs
         public override async Task OnDisconnectedAsync(Exception exception)
         {
             var httpContext = Context.GetHttpContext();
-            _clientManager.UpdateOnlineStatue( Context.ConnectionId,false);
+            string clientid = HttpUtility.ParseQueryString(httpContext.Request.QueryString.Value)["clientid"]; 
+            _clientManager.UpdateOnlineStatue( clientid,false);
             await Clients.All.SendAsync("ReceiveMessage", "", _clientManager.GetClients());
             await base.OnDisconnectedAsync(exception);
         }
